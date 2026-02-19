@@ -1,12 +1,26 @@
 import express from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { initMediasoup, closeMediasoup } from './server/mediasoup-server';
 import { registerRtpCapabilitiesRoute } from './routes/rtp-capabilities.route';
 import { registerTransportRoutes } from './routes/transport.route';
 import { registerProducerRoutes } from './routes/producer.route';
 import { registerConsumerRoutes } from './routes/consumer.route';
 
-const PORT = 3001;
+// Load environment variables
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const nodeEnv = process.env.NODE_ENV || 'local';
+const envFile = path.resolve(__dirname, `../.env.${nodeEnv}`);
+dotenv.config({ path: envFile });
+
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001;
+const SIGNALING_SERVER_URL = process.env.SIGNALING_SERVER_URL || 'ws://localhost:3000';
+const TURN_SERVER_URL = process.env.TURN_SERVER_URL || 'turn:localhost:3478';
+const TURN_USERNAME = process.env.TURN_USERNAME || 'user';
+const TURN_PASSWORD = process.env.TURN_PASSWORD || 'password';
 const app = express();
 
 // Middleware
@@ -32,7 +46,9 @@ async function start(): Promise<void> {
 
     // Start Express server
     app.listen(PORT, () => {
-      console.log(`SFU server started at http://localhost:${PORT}`);
+      console.log(`SFU server started at http://localhost:${PORT} [${nodeEnv.toUpperCase()}]`);
+      console.log(`Signaling Server: ${SIGNALING_SERVER_URL}`);
+      console.log(`TURN Server: ${TURN_SERVER_URL}`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);
