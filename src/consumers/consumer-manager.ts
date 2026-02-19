@@ -10,14 +10,19 @@ export async function createConsumer(
   producerId: string,
   kind: MediaKind
 ): Promise<ConsumerInfo> {
+  console.log(`[CONSUMER-MGR] createConsumer called - peerId: ${peerId}, transportId: ${transportId}, producerId: ${producerId}, kind: ${kind}`);
+
   const transport = getTransportOrThrow(peerId, transportId);
   const router = getRouter();
 
+  console.log(`[CONSUMER-MGR] Consuming producer on transport - producerId: ${producerId}`);
   const consumer = await transport.consume({
     producerId,
     rtpCapabilities: router.rtpCapabilities,
     paused: false,
   });
+
+  console.log(`[CONSUMER-MGR] ✓ Consumer created - consumerId: ${consumer.id}, producerId: ${consumer.producerId}`);
 
   return {
     id: consumer.id,

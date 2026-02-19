@@ -27,6 +27,25 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Request logging middleware
+app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+  const startTime = Date.now();
+  console.log(`[${new Date().toISOString()}] → ${req.method} ${req.path}`);
+  if (Object.keys(req.body).length > 0) {
+    console.log('  Body:', JSON.stringify(req.body));
+  }
+  if (Object.keys(req.query).length > 0) {
+    console.log('  Query:', JSON.stringify(req.query));
+  }
+
+  res.on('finish', () => {
+    const duration = Date.now() - startTime;
+    console.log(`[${new Date().toISOString()}] ← ${req.method} ${req.path} ${res.statusCode} (${duration}ms)\n`);
+  });
+
+  next();
+});
+
 // Routes
 registerRtpCapabilitiesRoute(app);
 registerTransportRoutes(app);
