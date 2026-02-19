@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start:local": "NODE_ENV=local tsx watch src/index.ts",
-    "start:dev": "NODE_ENV=dev tsx watch src/index.ts",
+    "start:dev": "NODE_ENV=dev node dist/index.js",
     "start:prd": "NODE_ENV=prd node dist/index.js",
     "build": "tsc",
     "start": "node dist/index.js",
