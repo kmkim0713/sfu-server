@@ -49,7 +49,7 @@ export async function initMediasoup(): Promise<void> {
     console.log('[MEDIASOUP] ✓ Router created successfully');
 
     // Router event listeners
-    router.on('close', () => {
+    router.on('@close', () => {
       console.log('[MEDIASOUP] ℹ Router closed');
     });
 
