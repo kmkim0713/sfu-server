@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { initMediasoup, closeMediasoup } from './server/mediasoup-server';
 import { registerRtpCapabilitiesRoute } from './routes/rtp-capabilities.route';
 import { registerTransportRoutes } from './routes/transport.route';
@@ -10,10 +9,8 @@ import { registerProducerRoutes } from './routes/producer.route';
 import { registerConsumerRoutes } from './routes/consumer.route';
 
 // Load environment variables
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const nodeEnv = process.env.NODE_ENV || 'local';
-const envFile = path.resolve(__dirname, `../.env.${nodeEnv}`);
+const envFile = path.resolve(process.cwd(), `.env.${nodeEnv}`);
 dotenv.config({ path: envFile });
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001;
