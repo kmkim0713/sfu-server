@@ -2,7 +2,7 @@
   "name": "sfu-server",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "start:local": "NODE_ENV=local tsx watch src/index.ts",
     "start:dev": "NODE_ENV=dev node dist/index.js",
